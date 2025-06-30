@@ -13,6 +13,7 @@
     }
 
   body {
+     padding-bottom: 50px;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   background: linear-gradient(135deg, #d0e4ff, #a4c5ff);
   min-height: 100vh;
@@ -286,17 +287,29 @@
       <p>Si ganás: +3 fichas</p>
       <button class="btn secondary" onclick="volverMenu()">🔙 Volver al menú</button>
     </section>
+<section class="ruleta" id="ruleta" role="region" aria-label="Juego Ruleta">
+  <div class="ruleta-display" id="ruletaDisplay">
+    <div id="ruletaResultado">🎯</div>
+  </div>
+  <select id="apuesta" aria-label="Número de apuesta">
+    <option value="" disabled selected>Elegí un número del 1 al 10</option>
+    <option value="1">1</option>
+    <option value="2">2</option>
+    <option value="3">3</option>
+    <option value="4">4</option>
+    <option value="5">5</option>
+    <option value="6">6</option>
+    <option value="7">7</option>
+    <option value="8">8</option>
+    <option value="9">9</option>
+    <option value="10">10</option>
+  </select>
+  <button class="btn" onclick="tirarRuleta()">Girar</button>
+  <div class="message" id="msgRuleta"></div>
+  <p>Si acertás: +5 fichas</p>
+  <button class="btn secondary" onclick="volverMenu()">🔙 Volver al menú</button>
+</section>
 
-    <section class="ruleta" id="ruleta" role="region" aria-label="Juego Ruleta">
-      <div class="ruleta-display" id="ruletaDisplay">
-        <div id="ruletaResultado">🎯</div>
-      </div>
-      <input type="number" id="apuesta" placeholder="Elegí un número del 1 al 10" min="1" max="10" aria-label="Número de apuesta" />
-      <button class="btn" onclick="tirarRuleta()">Girar</button>
-      <div class="message" id="msgRuleta"></div>
-      <p>Si acertás: +5 fichas</p>
-      <button class="btn secondary" onclick="volverMenu()">🔙 Volver al menú</button>
-    </section>
 
     <section class="apuestas" id="apuestas" role="region" aria-label="Juego Apuestas">
       <input type="number" id="cantidadApostar" placeholder="¿Cuántas fichas querés apostar?" min="1" aria-label="Cantidad a apostar" />
@@ -329,6 +342,21 @@
     </section>
 
   </main>
+  <br>
+<footer style="
+  background-color: #1f2937;
+  color: white;
+  text-align: center;
+  padding: 15px 10px;
+  font-size: 0.9rem;
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  box-shadow: 0 -2px 8px rgba(0,0,0,0.3);
+  user-select: none;
+">
+  © 2025 Mini Casino - Todos los derechos reservados
+</footer>
 
   <script>
     let fichas = 100;
