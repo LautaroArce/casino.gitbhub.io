@@ -199,9 +199,13 @@
 <body>
 
   <nav class="navbar" role="banner">
-    <div class="logo" aria-label="Mini Casino Logo">🎮 Mini Casino</div>
+  <div class="logo" aria-label="Mini Casino Logo">🎮 Mini Casino</div>
+  <div style="display: flex; align-items: center; gap: 20px;">
     <div class="fichas-movil" aria-live="polite">Fichas: <span id="fichas">100</span></div>
-  </nav>
+    <button class="btn secondary" onclick="window.open('img/qr.png', '_blank')">📷 Ver QR</button>
+  </div>
+</nav>
+
 
   <main class="container" role="main" aria-live="polite" aria-atomic="true">
     <div class="chips">Fichas: <span id="fichas-desktop">100</span></div>
