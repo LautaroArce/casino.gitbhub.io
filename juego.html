@@ -361,24 +361,28 @@
 
   <!-- Juegos existentes -->
 
-  <section class="tragamonedas" id="tragamonedas" role="region" aria-label="Juego Tragamonedas">
-    <div class="slots" aria-live="polite">
+<section class="tragamonedas" id="tragamonedas">
+    <div class="slots">
       <div class="slot" id="slot1">1</div>
       <div class="slot" id="slot2">1</div>
       <div class="slot" id="slot3">1</div>
     </div>
-    <button class="btn" id="btnTraga" onclick="tirarTragamonedas()">Tirar</button>
+
+    <input type="number" id="apuestaTraga" placeholder="¿Cuántas fichas querés apostar?" min="1" />
+
+    <button class="btn" onclick="tirarTragamonedas()">Tirar</button>
     <div class="message" id="msgTraga"></div>
-    <p>Si ganás: +3 fichas</p>
+    <p>Si ganás: recibís el triple de tu apuesta</p>
     <button class="btn secondary" onclick="volverMenu()">🔙 Volver al menú</button>
   </section>
 
-  <section class="ruleta" id="ruleta" role="region" aria-label="Juego Ruleta">
+   <!-- Ruleta Actualizada -->
+  <section class="ruleta" id="ruleta">
     <p>Adivina el número que saldrá</p>
     <div class="ruleta-display" id="ruletaDisplay">
       <div id="ruletaResultado">🎯</div>
     </div>
-    <select id="apuesta" aria-label="Número de apuesta">
+    <select id="apuestaNumero">
       <option value="" disabled selected>Elegí un número del 1 al 10</option>
       <option value="1">1</option>
       <option value="2">2</option>
@@ -391,11 +395,14 @@
       <option value="9">9</option>
       <option value="10">10</option>
     </select>
+    <input type="number" id="apuestaCantidadRuleta" placeholder="¿Cuántas fichas apostás?" min="1" />
     <button class="btn" onclick="tirarRuleta()">Girar</button>
     <div class="message" id="msgRuleta"></div>
-    <p>Si acertás: +5 fichas</p>
+    <p>Si acertás: ganás 5 veces tu apuesta</p>
     <button class="btn secondary" onclick="volverMenu()">🔙 Volver al menú</button>
   </section>
+
+
 
   <section class="apuestas" id="apuestas" role="region" aria-label="Juego Apuestas">
     <input type="number" id="cantidadApostar" placeholder="¿Cuántas fichas querés apostar?" min="1" aria-label="Cantidad a apostar" />
@@ -561,41 +568,36 @@ function tirarTragamonedas() {
   const s2 = document.getElementById("slot2");
   const s3 = document.getElementById("slot3");
   const msg = document.getElementById("msgTraga");
+  const apuestaInput = document.getElementById("apuestaTraga");
+  const apuesta = parseInt(apuestaInput.value);
 
-  if (fichas < 1) {
-    msg.textContent = "⚠️ No tenés fichas para jugar.";
+  if (isNaN(apuesta) || apuesta < 1) {
+    msg.textContent = "⚠️ Ingresá una apuesta válida.";
     return;
   }
 
-  fichas--; // 🔻 Descontar una ficha al iniciar
+  if (apuesta > fichas) {
+    msg.textContent = "⚠️ No tenés suficientes fichas.";
+    return;
+  }
+
+  fichas -= apuesta;
   actualizarFichas();
-
-  const intervaloCambio = 100;
-  let interval1, interval2, interval3;
-
   msg.textContent = "🎰 Girando...";
 
-  interval1 = setInterval(() => {
+  const intervaloCambio = 100;
+  let interval1 = setInterval(() => {
     s1.textContent = Math.floor(Math.random() * 5) + 1;
   }, intervaloCambio);
-  interval2 = setInterval(() => {
+  let interval2 = setInterval(() => {
     s2.textContent = Math.floor(Math.random() * 5) + 1;
   }, intervaloCambio);
-  interval3 = setInterval(() => {
+  let interval3 = setInterval(() => {
     s3.textContent = Math.floor(Math.random() * 5) + 1;
   }, intervaloCambio);
 
-  // Parar el primer slot después de 1s
-  setTimeout(() => {
-    clearInterval(interval1);
-  }, 1000);
-
-  // Parar el segundo slot después de 1.5s
-  setTimeout(() => {
-    clearInterval(interval2);
-  }, 1500);
-
-  // Parar el tercero después de 2s y mostrar resultado final
+  setTimeout(() => clearInterval(interval1), 1000);
+  setTimeout(() => clearInterval(interval2), 1500);
   setTimeout(() => {
     clearInterval(interval3);
 
@@ -608,11 +610,13 @@ function tirarTragamonedas() {
     s3.textContent = slot3;
 
     if (slot1 === slot2 && slot2 === slot3) {
-      fichas += 3;
-      msg.textContent = "🎉 ¡Ganaste 3 fichas!";
+      const ganancia = apuesta * 3;
+      fichas += ganancia;
+      msg.textContent = `🎉 ¡Trío! Ganaste ${ganancia} fichas.`;
     } else {
-      msg.textContent = "😞 Mejor suerte la próxima.";
+      msg.textContent = "😞 No fue trío. Mejor suerte la próxima.";
     }
+
     actualizarFichas();
   }, 2000);
 }
@@ -621,24 +625,33 @@ function tirarTragamonedas() {
 
 
 function tirarRuleta() {
-  const apuesta = parseInt(document.getElementById("apuesta").value);
+  const numeroElegido = parseInt(document.getElementById("apuestaNumero").value);
+  const cantidad = parseInt(document.getElementById("apuestaCantidadRuleta").value);
   const msg = document.getElementById("msgRuleta");
-  if (isNaN(apuesta) || apuesta < 1 || apuesta > 10) {
-    msg.textContent = "⚠️ Ingresá un número del 1 al 10.";
+
+  if (isNaN(numeroElegido) || numeroElegido < 1 || numeroElegido > 10) {
+    msg.textContent = "⚠️ Elegí un número del 1 al 10.";
     return;
   }
-  if (fichas < 1) {
-    msg.textContent = "⚠️ No tenés fichas para apostar.";
+  if (isNaN(cantidad) || cantidad < 1) {
+    msg.textContent = "⚠️ Ingresá una apuesta válida.";
     return;
   }
-  fichas--;
+  if (cantidad > fichas) {
+    msg.textContent = "⚠️ No tenés suficientes fichas.";
+    return;
+  }
+
+  fichas -= cantidad;
   actualizarFichas();
-  msg.textContent = "Girando...";
+  msg.textContent = "🎯 Girando...";
+
   setTimeout(() => {
     const resultado = Math.floor(Math.random() * 10) + 1;
-    if (resultado === apuesta) {
-      fichas += 5;
-      msg.textContent = `🎉 ¡Ganaste! Salió ${resultado}.`;
+    if (resultado === numeroElegido) {
+      const ganancia = cantidad * 5;
+      fichas += ganancia;
+      msg.textContent = `🎉 ¡Ganaste! Salió ${resultado}. Ganaste ${ganancia} fichas.`;
     } else {
       msg.textContent = `😞 Salió ${resultado}. Perdiste.`;
     }
