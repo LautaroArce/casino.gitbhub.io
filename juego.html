@@ -372,7 +372,7 @@
 
     <button class="btn" onclick="tirarTragamonedas()">Tirar</button>
     <div class="message" id="msgTraga"></div>
-    <p>Si ganás: recibís el triple de tu apuesta</p>
+    <p>Si ganás: recibís 10 veces lo apostado</p>
     <button class="btn secondary" onclick="volverMenu()">🔙 Volver al menú</button>
   </section>
 
@@ -418,15 +418,16 @@
   </section>
 
   <section class="carta" id="carta" role="region" aria-label="Juego Carta Mayor">
-    <p>Sacá una carta (1 al 13). Si tu carta es mayor que la de la máquina, ganás.</p>
-    <div class="ruleta-display" id="ruletaDisplay">
-      <div id="ruletaResultado">♠️</div>
-    </div>
-    <button class="btn" onclick="jugarCarta()">Sacar carta</button>
-    <div class="message" id="msgCarta"></div>
-    <p>Si ganás: +2 fichas</p>
-    <button class="btn secondary" onclick="volverMenu()">🔙 Volver al menú</button>
-  </section>
+  <p>Sacá una carta (1 al 13). Si tu carta es mayor que la de la máquina, ganás.</p>
+  <input type="number" id="apuestaCarta" placeholder="¿Cuántas fichas querés apostar?" min="1" aria-label="Cantidad a apostar" />
+  <div class="ruleta-display" id="ruletaDisplayCarta">
+    <div id="ruletaResultadoCarta">♠️</div>
+  </div>
+  <button class="btn" onclick="jugarCarta()">Sacar carta</button>
+  <div class="message" id="msgCarta"></div>
+  <p>Si ganás: ganás el doble de lo apostado</p>
+  <button class="btn secondary" onclick="volverMenu()">🔙 Volver al menú</button>
+</section>
 
   <section class="dado" id="dado" role="region" aria-label="Juego Dado Mágico">
     <p>Lanzá un dado. Si sacás un 6, ganás.</p>
@@ -610,7 +611,7 @@ function tirarTragamonedas() {
     s3.textContent = slot3;
 
     if (slot1 === slot2 && slot2 === slot3) {
-      const ganancia = apuesta * 3;
+      const ganancia = apuesta * 10;
       fichas += ganancia;
       msg.textContent = `🎉 ¡Trío! Ganaste ${ganancia} fichas.`;
     } else {
@@ -699,27 +700,38 @@ function apostar() {
 
 function jugarCarta() {
   const msg = document.getElementById("msgCarta");
+  const apuestaInput = document.getElementById("apuestaCarta");
+  const apuesta = parseInt(apuestaInput.value);
+
+  if (isNaN(apuesta) || apuesta < 1) {
+    msg.textContent = "⚠️ Ingresá una cantidad válida para apostar.";
+    return;
+  }
+  if (apuesta > fichas) {
+    msg.textContent = "⚠️ No tenés suficientes fichas.";
+    return;
+  }
+
   const usuario = Math.floor(Math.random() * 13) + 1;
   const maquina = Math.floor(Math.random() * 13) + 1;
 
-  if (fichas < 1) {
-    msg.textContent = "⚠️ No tenés fichas para jugar.";
-    return;
-  }
-  fichas--;
+  fichas -= apuesta;
   actualizarFichas();
 
   if (usuario > maquina) {
-    fichas += 2;
-    msg.textContent = `🎉 Tu carta: ${usuario} | Máquina: ${maquina}. ¡Ganaste 2 fichas!`;
+    const ganancia = apuesta * 2;
+    fichas += ganancia;
+    msg.textContent = `🎉 Tu carta: ${usuario} | Máquina: ${maquina}. ¡Ganaste ${ganancia} fichas!`;
   } else if (usuario === maquina) {
-    msg.textContent = `🤝 Empate. Tu carta: ${usuario} | Máquina: ${maquina}.`;
+    fichas += apuesta;
+    msg.textContent = `🤝 Empate. Tu carta: ${usuario} | Máquina: ${maquina}. Se te devuelven las fichas.`;
   } else {
-    msg.textContent = `😞 Tu carta: ${usuario} | Máquina: ${maquina}. Perdiste.`;
+    msg.textContent = `😞 Tu carta: ${usuario} | Máquina: ${maquina}. Perdiste ${apuesta} fichas.`;
   }
-  actualizarFichas();
-}
 
+  actualizarFichas();
+  document.getElementById("ruletaResultadoCarta").textContent = usuario;
+}
 
 function jugarDado() {
   const msg = document.getElementById("msgDado");
