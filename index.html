@@ -550,20 +550,25 @@ function jugarRojaNegra() {
   }, 3100);
 }
 
-
 function tirarTragamonedas() {
   const s1 = document.getElementById("slot1");
   const s2 = document.getElementById("slot2");
   const s3 = document.getElementById("slot3");
   const msg = document.getElementById("msgTraga");
 
-  const intervaloCambio = 100; // cambio rápido cada 100ms
+  if (fichas < 1) {
+    msg.textContent = "⚠️ No tenés fichas para jugar.";
+    return;
+  }
 
+  fichas--; // 🔻 Descontar una ficha al iniciar
+  actualizarFichas();
+
+  const intervaloCambio = 100;
   let interval1, interval2, interval3;
 
   msg.textContent = "🎰 Girando...";
 
-  // Empezar animación para cada slot (números aleatorios cada 100ms)
   interval1 = setInterval(() => {
     s1.textContent = Math.floor(Math.random() * 5) + 1;
   }, intervaloCambio);
@@ -574,21 +579,20 @@ function tirarTragamonedas() {
     s3.textContent = Math.floor(Math.random() * 5) + 1;
   }, intervaloCambio);
 
-  // Parar el primer slot después de 1.5s
+  // Parar el primer slot después de 1s
   setTimeout(() => {
     clearInterval(interval1);
   }, 1000);
 
-  // Parar el segundo slot después de 2s
+  // Parar el segundo slot después de 1.5s
   setTimeout(() => {
     clearInterval(interval2);
-  }, 1000);
+  }, 1500);
 
-  // Parar el tercer slot después de 2.5s y mostrar resultado final
+  // Parar el tercero después de 2s y mostrar resultado final
   setTimeout(() => {
     clearInterval(interval3);
 
-    // Resultado final
     const slot1 = Math.floor(Math.random() * 5) + 1;
     const slot2 = Math.floor(Math.random() * 5) + 1;
     const slot3 = Math.floor(Math.random() * 5) + 1;
@@ -604,8 +608,9 @@ function tirarTragamonedas() {
       msg.textContent = "😞 Mejor suerte la próxima.";
     }
     actualizarFichas();
-  }, 1000);
+  }, 2000);
 }
+
 
 
 
