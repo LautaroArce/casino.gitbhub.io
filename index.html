@@ -1,577 +1,649 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Mini Casino</title>
-  <style>
-    /* Reset */
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Mini Casino</title>
+<style>
+  /* Reset */
+  * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
 
   body {
-     padding-bottom: 50px;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  background: linear-gradient(135deg, #d0e4ff, #a4c5ff);
-  min-height: 100vh;
-  padding-top: 70px; /* importante para no tapar contenido con navbar fijo */
-  display: flex;
-  justify-content: center;
-  align-items: flex-start;
-  color: #2c3e50;
-}
+    padding-bottom: 50px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #d0e4ff, #a4c5ff);
+    min-height: 100vh;
+    padding-top: 70px; /* Para navbar fijo */
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    color: #2c3e50;
+  }
 
-    .navbar {
-  position: fixed;
-  top: 0;
-  width: 100%;
-  background-color: #1f2937;
-  color: #fff;
-  padding: 12px 20px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  font-weight: 700;
-  font-size: 1.4rem;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.3);
-  z-index: 1000;
-  flex-wrap: wrap; /* Permite que los items bajen a otra línea */
-  gap: 8px;
-}
-
-.logo {
-  flex: 1 1 100%; /* Ocupa toda la fila en móvil */
-  font-size: 1.6rem;
-  text-align: center;
-  user-select: none;
-}
-
-.navbar > div:last-child {
-  display: flex;
-  align-items: center;
-  gap: 16px;
-  flex: 1 1 100%;
-  justify-content: center;
-}
-
-.fichas-movil {
-  font-weight: 700;
-  font-size: 1.3rem;
-  user-select: none;
-}
-
-.btn.secondary {
-  padding: 10px 18px;
-  font-size: 1.1rem;
-  border-radius: 14px;
-  box-shadow: 0 4px 12px rgba(107, 114, 128, 0.5);
-  user-select: none;
-  transition: background-color 0.25s ease, box-shadow 0.25s ease;
-}
-
-.btn.secondary:hover {
-  background-color: #4b5563;
-  box-shadow: 0 6px 18px rgba(75, 85, 99, 0.7);
-}
-
-/* Para pantallas más grandes, volvemos a la fila sin wrap */
-@media(min-width: 600px) {
   .navbar {
-    flex-wrap: nowrap;
-    padding: 15px 25px;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    background-color: #1f2937;
+    color: #fff;
+    padding: 12px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-weight: 700;
+    font-size: 1.4rem;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+    z-index: 1000;
+    flex-wrap: wrap;
+    gap: 8px;
   }
+
   .logo {
-    flex: none;
-    text-align: left;
-    font-size: 1.3rem;
+    flex: 1 1 100%;
+    font-size: 1.6rem;
+    text-align: center;
+    user-select: none;
   }
+
   .navbar > div:last-child {
-    flex: none;
-    justify-content: flex-end;
-    gap: 20px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    flex: 1 1 100%;
+    justify-content: center;
   }
-}
 
- .container {
-  max-width: 420px;
-  width: 100%;
-  background: #fff;
-  padding: 30px 35px;
-  border-radius: 20px;
-  box-shadow: 0 12px 30px rgba(0,0,0,0.1);
-  text-align: center;
-  margin-top: 80px; /* <- agregá esto para separarlo del navbar fijo */
-}
+  .fichas-movil {
+    font-weight: 700;
+    font-size: 1.3rem;
+    user-select: none;
+  }
 
+  .btn.secondary {
+    padding: 10px 18px;
+    font-size: 1.1rem;
+    border-radius: 14px;
+    box-shadow: 0 4px 12px rgba(107, 114, 128, 0.5);
+    user-select: none;
+    transition: background-color 0.25s ease, box-shadow 0.25s ease;
+  }
 
-    .chips {
-      font-weight: 700;
-      font-size: 1.4rem;
-      margin-bottom: 25px;
-      color: #1f2937;
-      user-select: none;
+  .btn.secondary:hover {
+    background-color: #4b5563;
+    box-shadow: 0 6px 18px rgba(75, 85, 99, 0.7);
+  }
+
+  @media(min-width: 600px) {
+    .navbar {
+      flex-wrap: nowrap;
+      padding: 15px 25px;
     }
-
-    /* Contenedores ocultos por defecto */
-    .menu, .tragamonedas, .ruleta, .apuestas, .carta, .dado {
-      display: none;
-      flex-direction: column;
+    .logo {
+      flex: none;
+      text-align: left;
+      font-size: 1.3rem;
+    }
+    .navbar > div:last-child {
+      flex: none;
+      justify-content: flex-end;
       gap: 20px;
-      user-select: none;
     }
+  }
 
-    .visible {
-      display: flex;
-    }
+  .container {
+    max-width: 420px;
+    width: 100%;
+    background: #fff;
+    padding: 30px 35px;
+    border-radius: 20px;
+    box-shadow: 0 12px 30px rgba(0,0,0,0.1);
+    text-align: center;
+    margin-top: 80px;
+  }
 
-    /* Botones principales */
-    .btn {
-      background-color: #3b82f6;
-      color: white;
-      font-weight: 700;
-      font-size: 1.1rem;
-      padding: 14px 28px;
-      border: none;
-      border-radius: 16px;
-      cursor: pointer;
-      box-shadow: 0 6px 15px rgba(59, 130, 246, 0.35);
-      transition: background-color 0.3s ease, box-shadow 0.3s ease;
-      user-select: none;
-    }
-    .btn:hover:not(:disabled) {
-      background-color: #2563eb;
-      box-shadow: 0 8px 20px rgba(37, 99, 235, 0.5);
-    }
-    .btn:disabled {
-      background-color: #9ca3af;
-      cursor: not-allowed;
-      box-shadow: none;
-    }
+  .chips {
+    font-weight: 700;
+    font-size: 1.4rem;
+    margin-bottom: 25px;
+    color: #1f2937;
+    user-select: none;
+  }
 
-    /* Botones secundarios */
-    .btn.secondary {
-      background-color: #6b7280;
-      box-shadow: 0 4px 10px rgba(107, 114, 128, 0.35);
-      color: #e0e7ff;
-    }
-    .btn.secondary:hover {
-      background-color: #4b5563;
-      box-shadow: 0 6px 15px rgba(75, 85, 99, 0.6);
-    }
+  .menu, .tragamonedas, .ruleta, .apuestas, .carta, .dado, .ruleta-roja-negra {
+    display: none;
+    flex-direction: column;
+    gap: 20px;
+    user-select: none;
+  }
 
-    /* Slots Tragamonedas */
-    .slots {
-      display: flex;
-      justify-content: center;
-      gap: 18px;
-      font-weight: 900;
-      font-size: 2.6rem;
-      margin: 15px 0 25px 0;
-      user-select: none;
-    }
-    .slot {
-      width: 70px;
-      height: 70px;
-      background: #e0e7ff;
-      border-radius: 18px;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      color: #2563eb;
-      box-shadow: inset 0 0 15px rgba(37, 99, 235, 0.2);
-      user-select: none;
-      transition: background-color 0.3s ease;
-    }
+  .visible {
+    display: flex;
+  }
 
-    /* Ruleta y dado display */
-    .ruleta-display, .dado-display {
-      width: 110px;
-      height: 110px;
-      margin: 0 auto 20px auto;
-      border-radius: 30px;
-      background: #e0e7ff;
-      box-shadow: inset 0 0 20px rgba(37, 99, 235, 0.25);
-      color: #2563eb;
-      font-weight: 900;
-      font-size: 4.8rem;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      user-select: none;
-      transition: box-shadow 0.4s ease;
-    }
+  .btn {
+    background-color: #3b82f6;
+    color: white;
+    font-weight: 700;
+    font-size: 1.1rem;
+    padding: 14px 28px;
+    border: none;
+    border-radius: 16px;
+    cursor: pointer;
+    box-shadow: 0 6px 15px rgba(59, 130, 246, 0.35);
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+    user-select: none;
+  }
+  .btn:hover:not(:disabled) {
+    background-color: #2563eb;
+    box-shadow: 0 8px 20px rgba(37, 99, 235, 0.5);
+  }
+  .btn:disabled {
+    background-color: #9ca3af;
+    cursor: not-allowed;
+    box-shadow: none;
+  }
 
-    /* Animaciones */
-    @keyframes spin {
-      0% { transform: rotate(0deg); }
-      100% { transform: rotate(1080deg); }
-    }
-    .spin {
-      animation: spin 1s ease;
-      box-shadow: inset 0 0 30px rgba(37, 99, 235, 0.8);
-    }
+  .btn.secondary {
+    background-color: #6b7280;
+    box-shadow: 0 4px 10px rgba(107, 114, 128, 0.35);
+    color: #e0e7ff;
+  }
+  .btn.secondary:hover {
+    background-color: #4b5563;
+    box-shadow: 0 6px 15px rgba(75, 85, 99, 0.6);
+  }
 
-    /* Inputs y select */
-    input[type="number"], select {
-      width: 100%;
-      padding: 14px 18px;
-      font-size: 1.1rem;
-      border-radius: 16px;
-      border: 2px solid #cbd5e1;
-      font-weight: 600;
-      color: #1f2937;
-      transition: border-color 0.3s ease, box-shadow 0.3s ease;
-      user-select: text;
-    }
-    input[type="number"]:focus, select:focus {
-      outline: none;
-      border-color: #3b82f6;
-      box-shadow: 0 0 8px rgba(59, 130, 246, 0.5);
-    }
+  .slots {
+    display: flex;
+    justify-content: center;
+    gap: 18px;
+    font-weight: 900;
+    font-size: 2.6rem;
+    margin: 15px 0 25px 0;
+    user-select: none;
+  }
+  .slot {
+    width: 70px;
+    height: 70px;
+    background: #e0e7ff;
+    border-radius: 18px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #2563eb;
+    box-shadow: inset 0 0 15px rgba(37, 99, 235, 0.2);
+    user-select: none;
+    transition: background-color 0.3s ease;
+  }
 
-    /* Mensajes */
-    .message {
-      min-height: 28px;
-      font-weight: 700;
-      font-size: 1.15rem;
-      color: #1e293b;
-      margin-bottom: 15px;
-      user-select: none;
-      min-height: 1.4em;
-      transition: color 0.3s ease;
-    }
+  .ruleta-display, .dado-display {
+    width: 110px;
+    height: 110px;
+    margin: 0 auto 20px auto;
+    border-radius: 30px;
+    background: #e0e7ff;
+    box-shadow: inset 0 0 20px rgba(37, 99, 235, 0.25);
+    color: #2563eb;
+    font-weight: 900;
+    font-size: 4.8rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    user-select: none;
+    transition: box-shadow 0.4s ease;
+  }
 
-    p {
-      font-weight: 600;
-      font-size: 0.95rem;
-      color: #334155;
-      margin-bottom: 15px;
-      user-select: none;
-    }
+  input[type="number"], select {
+    width: 100%;
+    padding: 14px 18px;
+    font-size: 1.1rem;
+    border-radius: 16px;
+    border: 2px solid #cbd5e1;
+    font-weight: 600;
+    color: #1f2937;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    user-select: text;
+  }
+  input[type="number"]:focus, select:focus {
+    outline: none;
+    border-color: #3b82f6;
+    box-shadow: 0 0 8px rgba(59, 130, 246, 0.5);
+  }
 
-  </style>
+  .message {
+    min-height: 28px;
+    font-weight: 700;
+    font-size: 1.15rem;
+    color: #1e293b;
+    margin-bottom: 15px;
+    user-select: none;
+    min-height: 1.4em;
+    transition: color 0.3s ease;
+  }
+
+  p {
+    font-weight: 600;
+    font-size: 0.95rem;
+    color: #334155;
+    margin-bottom: 15px;
+    user-select: none;
+  }
+
+  /* Ruleta Roja, Negra y Verde */
+
+  #ruletaVisual {
+    width: 180px;
+    height: 180px;
+    border-radius: 50%;
+    margin: 20px auto 10px;
+    position: relative;
+    box-shadow:
+      0 4px 15px rgba(0,0,0,0.25),
+      inset 0 0 30px rgba(0,0,0,0.1);
+    user-select: none;
+    border: 6px solid #333;
+    overflow: hidden;
+    background: conic-gradient(
+      #ff0000 0deg 171deg,
+      #000000 171deg 342deg,
+      #008000 342deg 360deg
+    );
+    transition: transform 3s cubic-bezier(0.33, 1, 0.68, 1);
+  }
+
+  /* Flecha indicadora */
+  #flecha {
+    position: absolute;
+    top: -14px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 0; 
+    height: 0; 
+    border-left: 16px solid transparent;
+    border-right: 16px solid transparent;
+    border-bottom: 26px solid #222;
+    filter: drop-shadow(0 1px 2px rgba(0,0,0,0.4));
+    user-select: none;
+    z-index: 10;
+  }
+
+  footer {
+    background-color: #1f2937;
+    color: white;
+    text-align: center;
+    padding: 15px 10px;
+    font-size: 0.9rem;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    box-shadow: 0 -2px 8px rgba(0,0,0,0.3);
+    user-select: none;
+  }
+
+</style>
 </head>
 <body>
 
-  <nav class="navbar" role="banner">
+<nav class="navbar" role="banner">
   <div class="logo" aria-label="Mini Casino Logo">🎮 Mini Casino</div>
   <div>
     <div class="fichas-movil" aria-live="polite" aria-atomic="true">Fichas: <span id="fichas">100</span></div>
-    <button class="btn secondary" onclick="window.open('img/qr_casino.png')" aria-label="Ver código QR del casino">📷 Ver QR</button>
+    <button class="btn secondary" onclick="alert('Funcionalidad QR no implementada')" aria-label="Ver código QR del casino">📷 Ver QR</button>
   </div>
 </nav>
 
-  <main class="container" role="main" aria-live="polite" aria-atomic="true">
-    <div class="chips">Fichas: <span id="fichas-desktop">100</span></div>
+<main class="container" role="main" aria-live="polite" aria-atomic="true">
+  <div class="chips">Fichas: <span id="fichas-desktop">100</span></div>
 
-    <section class="menu visible" id="menu" role="menu" aria-label="Menú de juegos">
-      <button class="btn" onclick="mostrarJuego('tragamonedas')">🎰 Tragamonedas</button>
-      <button class="btn" onclick="mostrarJuego('ruleta')">🎡 Ruleta</button>
-      <button class="btn" onclick="mostrarJuego('apuestas')">💰 Apuestas</button>
-      <button class="btn" onclick="mostrarJuego('carta')">🃏 Carta Mayor</button>
-      <button class="btn" onclick="mostrarJuego('dado')">🎲 Dado Mágico</button>
-      <button class="btn secondary" onclick="reiniciarJuego()">🔄 Reiniciar fichas</button>
-    </section>
+  <section class="menu visible" id="menu" role="menu" aria-label="Menú de juegos">
+    <button class="btn" onclick="mostrarJuego('tragamonedas')">🎰 Tragamonedas</button>
+    <button class="btn" onclick="mostrarJuego('ruleta')">🎡 Ruleta</button>
+    <button class="btn" onclick="mostrarJuego('apuestas')">💰 Apuestas</button>
+    <button class="btn" onclick="mostrarJuego('carta')">🃏 Carta Mayor</button>
+    <button class="btn" onclick="mostrarJuego('dado')">🎲 Dado Mágico</button>
+    <button class="btn" onclick="mostrarJuego('ruleta-roja-negra')">🎲🔴⚫ Ruleta Roja, Negra y Verde</button>
+    <button class="btn secondary" onclick="reiniciarJuego()">🔄 Reiniciar fichas</button>
+  </section>
 
-    <section class="tragamonedas" id="tragamonedas" role="region" aria-label="Juego Tragamonedas">
-      <div class="slots" aria-live="polite">
-        <div class="slot" id="slot1">1</div>
-        <div class="slot" id="slot2">1</div>
-        <div class="slot" id="slot3">1</div>
-      </div>
-      <button class="btn" id="btnTraga" onclick="tirarTragamonedas()">Tirar</button>
-      <div class="message" id="msgTraga"></div>
-      <p>Si ganás: +3 fichas</p>
-      <button class="btn secondary" onclick="volverMenu()">🔙 Volver al menú</button>
-    </section>
+  <!-- Juegos existentes -->
 
-<section class="ruleta" id="ruleta" role="region" aria-label="Juego Ruleta">
-  <p>Adivina el numero que saldra</p>
-  <div class="ruleta-display" id="ruletaDisplay">
-    <div id="ruletaResultado">🎯</div>
-  </div>
-  <select id="apuesta" aria-label="Número de apuesta">
-    <option value="" disabled selected>Elegí un número del 1 al 10</option>
-    <option value="1">1</option>
-    <option value="2">2</option>
-    <option value="3">3</option>
-    <option value="4">4</option>
-    <option value="5">5</option>
-    <option value="6">6</option>
-    <option value="7">7</option>
-    <option value="8">8</option>
-    <option value="9">9</option>
-    <option value="10">10</option>
-  </select>
-  <button class="btn" onclick="tirarRuleta()">Girar</button>
-  <div class="message" id="msgRuleta"></div>
-  <p>Si acertás: +5 fichas</p>
-  <button class="btn secondary" onclick="volverMenu()">🔙 Volver al menú</button>
-</section>
+  <section class="tragamonedas" id="tragamonedas" role="region" aria-label="Juego Tragamonedas">
+    <div class="slots" aria-live="polite">
+      <div class="slot" id="slot1">1</div>
+      <div class="slot" id="slot2">1</div>
+      <div class="slot" id="slot3">1</div>
+    </div>
+    <button class="btn" id="btnTraga" onclick="tirarTragamonedas()">Tirar</button>
+    <div class="message" id="msgTraga"></div>
+    <p>Si ganás: +3 fichas</p>
+    <button class="btn secondary" onclick="volverMenu()">🔙 Volver al menú</button>
+  </section>
 
+  <section class="ruleta" id="ruleta" role="region" aria-label="Juego Ruleta">
+    <p>Adivina el número que saldrá</p>
+    <div class="ruleta-display" id="ruletaDisplay">
+      <div id="ruletaResultado">🎯</div>
+    </div>
+    <select id="apuesta" aria-label="Número de apuesta">
+      <option value="" disabled selected>Elegí un número del 1 al 10</option>
+      <option value="1">1</option>
+      <option value="2">2</option>
+      <option value="3">3</option>
+      <option value="4">4</option>
+      <option value="5">5</option>
+      <option value="6">6</option>
+      <option value="7">7</option>
+      <option value="8">8</option>
+      <option value="9">9</option>
+      <option value="10">10</option>
+    </select>
+    <button class="btn" onclick="tirarRuleta()">Girar</button>
+    <div class="message" id="msgRuleta"></div>
+    <p>Si acertás: +5 fichas</p>
+    <button class="btn secondary" onclick="volverMenu()">🔙 Volver al menú</button>
+  </section>
 
-    <section class="apuestas" id="apuestas" role="region" aria-label="Juego Apuestas">
-      <input type="number" id="cantidadApostar" placeholder="¿Cuántas fichas querés apostar?" min="1" aria-label="Cantidad a apostar" />
-      <select id="multiplicador" aria-label="Multiplicador de apuesta">
-        <option value="2">x2</option>
-        <option value="3">x3</option>
-        <option value="4">x4</option>
-      </select>
-      <button class="btn" onclick="apostar()">Apostar</button>
-      <div class="message" id="msgApuesta"></div>
-      <p>Probabilidades: x2 = 50% | x3 = 33% | x4 = 25%</p>
-      <button class="btn secondary" onclick="volverMenu()">🔙 Volver al menú</button>
-    </section>
+  <section class="apuestas" id="apuestas" role="region" aria-label="Juego Apuestas">
+    <input type="number" id="cantidadApostar" placeholder="¿Cuántas fichas querés apostar?" min="1" aria-label="Cantidad a apostar" />
+    <select id="multiplicador" aria-label="Multiplicador de apuesta">
+      <option value="2">x2</option>
+      <option value="3">x3</option>
+      <option value="4">x4</option>
+    </select>
+    <button class="btn" onclick="apostar()">Apostar</button>
+    <div class="message" id="msgApuesta"></div>
+    <p>Probabilidades: x2 = 50% | x3 = 33% | x4 = 25%</p>
+    <button class="btn secondary" onclick="volverMenu()">🔙 Volver al menú</button>
+  </section>
 
-    <section class="carta" id="carta" role="region" aria-label="Juego Carta Mayor">
-      <p>Sacá una carta (1 al 13). Si tu carta es mayor que la de la máquina, ganás.</p>
-      <button class="btn" onclick="jugarCarta()">Sacar carta</button>
-      <div class="message" id="msgCarta"></div>
-      <p>Si ganás: +2 fichas</p>
-      <button class="btn secondary" onclick="volverMenu()">🔙 Volver al menú</button>
-    </section>
+  <section class="carta" id="carta" role="region" aria-label="Juego Carta Mayor">
+    <p>Sacá una carta (1 al 13). Si tu carta es mayor que la de la máquina, ganás.</p>
+    <button class="btn" onclick="jugarCarta()">Sacar carta</button>
+    <div class="message" id="msgCarta"></div>
+    <p>Si ganás: +2 fichas</p>
+    <button class="btn secondary" onclick="volverMenu()">🔙 Volver al menú</button>
+  </section>
 
-    <section class="dado" id="dado" role="region" aria-label="Juego Dado Mágico">
-      <p>Lanzá un dado. Si sacás un 6, ganás.</p>
-      <div class="dado-display" id="dadoNumero">🎲</div>
-      <button class="btn" onclick="jugarDado()">Lanzar dado</button>
-      <div class="message" id="msgDado"></div>
-      <p>Si sale 6: +4 fichas</p>
-      <button class="btn secondary" onclick="volverMenu()">🔙 Volver al menú</button>
-    </section>
+  <section class="dado" id="dado" role="region" aria-label="Juego Dado Mágico">
+    <p>Lanzá un dado. Si sacás un 6, ganás.</p>
+    <div class="dado-display" id="dadoNumero">🎲</div>
+    <button class="btn" onclick="jugarDado()">Lanzar dado</button>
+    <div class="message" id="msgDado"></div>
+    <p>Si sale 6: +4 fichas</p>
+    <button class="btn secondary" onclick="volverMenu()">🔙 Volver al menú</button>
+  </section>
 
-  </main>
-  <br>
-<footer style="
-  background-color: #1f2937;
-  color: white;
-  text-align: center;
-  padding: 15px 10px;
-  font-size: 0.9rem;
-  position: fixed;
-  bottom: 0;
-  width: 100%;
-  box-shadow: 0 -2px 8px rgba(0,0,0,0.3);
-  user-select: none;
-">
-  © 2025 Mini Casino - Todos los derechos reservados
+  <!-- Ruleta Roja, Negra y Verde -->
+  <section class="ruleta-roja-negra" id="ruleta-roja-negra" role="region" aria-label="Juego Ruleta Roja, Negra y Verde">
+    <input type="number" id="apuestaRojaNegra" placeholder="Cantidad a apostar" min="1" aria-label="Cantidad a apostar" />
+    <select id="eleccionRojaNegra" aria-label="Elegir roja, negra o verde">
+      <option value="" disabled selected>Elegí Roja o Negra</option>
+      <option value="roja">Roja</option>
+      <option value="negra">Negra</option>
+    </select>
+
+    <div id="ruletaVisual" aria-live="polite" aria-atomic="true" aria-label="Ruleta que gira">
+      <div id="flecha" aria-hidden="true"></div>
+    </div>
+
+    <button class="btn" id="btnRojaNegra" onclick="jugarRojaNegra()">Apostar</button>
+    <div class="message" id="msgRojaNegra"></div>
+    <p>Si acertás: multiplicás la apuesta x 2. Si toca verde (5% sorpresa), ganás x14.</p>
+    <button class="btn secondary" onclick="volverMenu()">🔙 Volver al menú</button>
+  </section>
+
+</main>
+
+<footer role="contentinfo">
+  &copy; 2025 Mini Casino. Todos los derechos reservados.
 </footer>
+<script>
+let fichas = 100;
+let ruletaAnguloAcumulado = 0; // Para la ruleta roja-negra-verde
 
-  <script>
-    let fichas = 100;
+function actualizarFichas() {
+  document.getElementById("fichas").textContent = fichas;
+  document.getElementById("fichas-desktop").textContent = fichas;
+}
 
-    function actualizarFichas() {
-      document.getElementById("fichas").textContent = fichas;
-      document.getElementById("fichas-desktop").textContent = fichas;
-    }
-
-    function mostrarJuego(juego) {
-      document.getElementById("menu").classList.remove("visible");
-      document.querySelectorAll(".tragamonedas, .ruleta, .apuestas, .carta, .dado").forEach(el => {
+function mostrarJuego(nombre) {
+  limpiarMensajes();
+  const juegos = ["menu", "tragamonedas", "ruleta", "apuestas", "carta", "dado", "ruleta-roja-negra"];
+  juegos.forEach(j => {
+    const el = document.getElementById(j);
+    if (el) {
+      if (j === nombre) {
+        el.classList.add("visible");
+      } else {
         el.classList.remove("visible");
-      });
-      document.getElementById(juego).classList.add("visible");
-      limpiarMensajes();
-    }
-
-    function limpiarMensajes() {
-      document.getElementById("msgTraga").textContent = "";
-      document.getElementById("msgRuleta").textContent = "";
-      document.getElementById("msgApuesta").textContent = "";
-      document.getElementById("msgCarta").textContent = "";
-      document.getElementById("msgDado").textContent = "";
-    }
-
-    function volverMenu() {
-      document.getElementById("menu").classList.add("visible");
-      document.querySelectorAll(".tragamonedas, .ruleta, .apuestas, .carta, .dado").forEach(el => {
-        el.classList.remove("visible");
-      });
-      limpiarMensajes();
-    }
-
-    function reiniciarJuego() {
-      fichas = 100;
-      actualizarFichas();
-      document.getElementById("slot1").textContent = "1";
-      document.getElementById("slot2").textContent = "1";
-      document.getElementById("slot3").textContent = "1";
-      document.getElementById("ruletaResultado").textContent = "🎯";
-      document.getElementById("dadoNumero").textContent = "🎲";
-      document.getElementById("btnTraga").disabled = false;
-      limpiarMensajes();
-    }
-
-    function obtenerNumero() {
-      return Math.floor(Math.random() * 5) + 1;
-    }
-
-    function animarSlots(callback) {
-      let vueltas = 12;
-      let interval = setInterval(() => {
-        document.getElementById('slot1').textContent = obtenerNumero();
-        document.getElementById('slot2').textContent = obtenerNumero();
-        document.getElementById('slot3').textContent = obtenerNumero();
-        vueltas--;
-        if (vueltas === 0) {
-          clearInterval(interval);
-          callback();
-        }
-      }, 80);
-    }
-
-    function tirarTragamonedas() {
-      if (fichas <= 0) {
-        document.getElementById("msgTraga").textContent = "😢 No te quedan fichas.";
-        return;
       }
-
-      fichas--;
-      actualizarFichas();
-      document.getElementById("msgTraga").textContent = "Girando... 🎲";
-      document.getElementById("btnTraga").disabled = true;
-
-      animarSlots(() => {
-        const a = obtenerNumero();
-        const b = obtenerNumero();
-        const c = obtenerNumero();
-        document.getElementById("slot1").textContent = a;
-        document.getElementById("slot2").textContent = b;
-        document.getElementById("slot3").textContent = c;
-
-        if (a === b && b === c) {
-          fichas += 3;
-          document.getElementById("msgTraga").textContent = "🎉 ¡Ganaste! +3 fichas";
-        } else {
-          document.getElementById("msgTraga").textContent = "😕 No ganaste.";
-        }
-
-        actualizarFichas();
-        document.getElementById("btnTraga").disabled = false;
-      });
     }
+  });
+}
 
-    function tirarRuleta() {
-      if (fichas <= 0) {
-        document.getElementById("msgRuleta").textContent = "😢 No te quedan fichas.";
-        return;
-      }
+// Limpiar mensajes
+function limpiarMensajes() {
+  const ids = ["msgTraga", "msgRuleta", "msgApuesta", "msgCarta", "msgDado", "msgRojaNegra"];
+  ids.forEach(id => {
+    const el = document.getElementById(id);
+    if(el) el.textContent = "";
+  });
+}
 
-      const numeroUsuario = parseInt(document.getElementById("apuesta").value);
-      if (isNaN(numeroUsuario) || numeroUsuario < 1 || numeroUsuario > 10) {
-        document.getElementById("msgRuleta").textContent = "⚠️ Ingresá un número válido (1 al 10).";
-        return;
-      }
+// Juegos...
 
-      fichas--;
-      actualizarFichas();
+function jugarRojaNegra() {
+  const msg = document.getElementById("msgRojaNegra");
+  const apuestaInput = document.getElementById("apuestaRojaNegra");
+  const eleccion = document.getElementById("eleccionRojaNegra").value;
+  const ruleta = document.getElementById("ruletaVisual");
+  const apuesta = parseInt(apuestaInput.value);
 
-      const resultado = Math.floor(Math.random() * 10) + 1;
-      document.getElementById("ruletaResultado").textContent = resultado;
+  if (!eleccion) {
+    msg.textContent = "⚠️ Seleccioná roja, negra o verde.";
+    return;
+  }
+  if (isNaN(apuesta) || apuesta < 1) {
+    msg.textContent = "⚠️ Ingresá una cantidad válida para apostar.";
+    return;
+  }
+  if (apuesta > fichas) {
+    msg.textContent = "⚠️ No tenés suficientes fichas.";
+    return;
+  }
 
-      if (resultado === numeroUsuario) {
-        fichas += 5;
-        document.getElementById("msgRuleta").textContent = "🎉 ¡Acertaste! +5 fichas";
-      } else {
-        document.getElementById("msgRuleta").textContent = "😞 No acertaste. Era el " + resultado;
-      }
+  fichas -= apuesta;
+  actualizarFichas();
+  msg.textContent = "Girando la ruleta...";
 
-      actualizarFichas();
+  const random = Math.random();
+  let resultado;
+  if (random < 0.05) {
+    resultado = "verde";
+  } else if (random < 0.525) {
+    resultado = "roja";
+  } else {
+    resultado = "negra";
+  }
+
+  const angulos = {
+    roja: 0,
+    negra: 120,
+    verde: 240
+  };
+
+  ruleta.style.transition = "transform 3s cubic-bezier(0.33, 1, 0.68, 1)";
+  
+  // Acumular el ángulo para que la ruleta siga girando correctamente
+  ruletaAnguloAcumulado += 1080 + angulos[resultado];
+  ruleta.style.transform = `rotate(${ruletaAnguloAcumulado}deg)`;
+
+  setTimeout(() => {
+  let mensaje;
+
+  if (resultado === "verde") {
+    const ganancia = apuesta * 14;
+    fichas += ganancia;
+    mensaje = `🟢 ¡Sorpresa! Salió verde. Ganaste ${ganancia} fichas.`;
+  } else if (eleccion === resultado) {
+    const ganancia = apuesta * 2;
+    fichas += ganancia;
+    mensaje = `🎉 ¡Ganaste! Salió ${resultado}. Obtuviste ${ganancia} fichas.`;
+  } else {
+    mensaje = `😞 Salió ${resultado}. Perdiste la apuesta.`;
+  }
+
+  msg.textContent = mensaje;
+  actualizarFichas();
+}, 3100);
+}
+
+function tirarTragamonedas() {
+  const slot1 = Math.floor(Math.random() * 5) + 1;
+  const slot2 = Math.floor(Math.random() * 5) + 1;
+  const slot3 = Math.floor(Math.random() * 5) + 1;
+
+  document.getElementById("slot1").textContent = slot1;
+  document.getElementById("slot2").textContent = slot2;
+  document.getElementById("slot3").textContent = slot3;
+
+  const msg = document.getElementById("msgTraga");
+  if (slot1 === slot2 && slot2 === slot3) {
+    fichas += 3;
+    msg.textContent = "🎉 ¡Ganaste 3 fichas!";
+  } else {
+    msg.textContent = "😞 Mejor suerte la próxima.";
+  }
+  actualizarFichas();
+}
+
+function tirarRuleta() {
+  const apuesta = parseInt(document.getElementById("apuesta").value);
+  const msg = document.getElementById("msgRuleta");
+  if (isNaN(apuesta) || apuesta < 1 || apuesta > 10) {
+    msg.textContent = "⚠️ Ingresá un número del 1 al 10.";
+    return;
+  }
+  if (fichas < 1) {
+    msg.textContent = "⚠️ No tenés fichas para apostar.";
+    return;
+  }
+  fichas--;
+  actualizarFichas();
+  msg.textContent = "Girando...";
+  setTimeout(() => {
+    const resultado = Math.floor(Math.random() * 10) + 1;
+    if (resultado === apuesta) {
+      fichas += 5;
+      msg.textContent = `🎉 ¡Ganaste! Salió ${resultado}.`;
+    } else {
+      msg.textContent = `😞 Salió ${resultado}. Perdiste.`;
     }
-
-    function apostar() {
-      const cantApostar = parseInt(document.getElementById("cantidadApostar").value);
-      const multiplicador = parseInt(document.getElementById("multiplicador").value);
-      const msg = document.getElementById("msgApuesta");
-
-      if (isNaN(cantApostar) || cantApostar < 1) {
-        msg.textContent = "⚠️ Ingresá una cantidad válida para apostar.";
-        return;
-      }
-      if (cantApostar > fichas) {
-        msg.textContent = "⚠️ No tenés suficientes fichas para apostar esa cantidad.";
-        return;
-      }
-
-      let prob;
-      if (multiplicador === 2) prob = 0.5;
-      else if (multiplicador === 3) prob = 0.33;
-      else prob = 0.25;
-
-      fichas -= cantApostar;
-      actualizarFichas();
-
-      let gano = Math.random() < prob;
-      if (gano) {
-        const ganancia = cantApostar * multiplicador;
-        fichas += ganancia;
-        msg.textContent = `🎉 ¡Ganaste! Obtuviste ${ganancia} fichas.`;
-      } else {
-        msg.textContent = "😞 Perdiste la apuesta.";
-      }
-      actualizarFichas();
-    }
-
-    function jugarCarta() {
-      const msg = document.getElementById("msgCarta");
-
-      if (fichas <= 0) {
-        msg.textContent = "😢 No te quedan fichas.";
-        return;
-      }
-
-      const cartaJugador = Math.floor(Math.random() * 13) + 1;
-      const cartaMaquina = Math.floor(Math.random() * 13) + 1;
-
-      fichas--;
-      actualizarFichas();
-
-      if (cartaJugador > cartaMaquina) {
-        fichas += 2;
-        msg.textContent = `🎉 Tu carta: ${cartaJugador} | Máquina: ${cartaMaquina} → ¡Ganaste! +2 fichas`;
-      } else if (cartaJugador === cartaMaquina) {
-        fichas++;
-        msg.textContent = `🤝 Tu carta: ${cartaJugador} | Máquina: ${cartaMaquina} → Empate`;
-      } else {
-        msg.textContent = `😞 Tu carta: ${cartaJugador} | Máquina: ${cartaMaquina} → Perdiste`;
-      }
-
-      actualizarFichas();
-    }
-
-    function jugarDado() {
-      const msg = document.getElementById("msgDado");
-      const dado = document.getElementById("dadoNumero");
-
-      if (fichas <= 0) {
-        msg.textContent = "😢 No te quedan fichas.";
-        return;
-      }
-
-      fichas--;
-      actualizarFichas();
-
-      dado.classList.add("spin");
-      setTimeout(() => {
-        dado.classList.remove("spin");
-        const resultado = Math.floor(Math.random() * 6) + 1;
-        dado.textContent = resultado;
-        if (resultado === 6) {
-          fichas += 4;
-          msg.textContent = "🎉 ¡Sacaste un 6! +4 fichas";
-        } else {
-          msg.textContent = `Salió ${resultado}. 😞 No ganaste.`;
-        }
-        actualizarFichas();
-      }, 1000);
-    }
-
-    // Inicializar fichas en pantalla
     actualizarFichas();
-  </script>
+  }, 1500);
+}
 
+function apostar() {
+  const cantidad = parseInt(document.getElementById("cantidadApostar").value);
+  const multiplicador = parseInt(document.getElementById("multiplicador").value);
+  const msg = document.getElementById("msgApuesta");
+
+  if (isNaN(cantidad) || cantidad < 1) {
+    msg.textContent = "⚠️ Ingresá una cantidad válida para apostar.";
+    return;
+  }
+  if (cantidad > fichas) {
+    msg.textContent = "⚠️ No tenés suficientes fichas.";
+    return;
+  }
+
+  fichas -= cantidad;
+  actualizarFichas();
+  msg.textContent = "Apostando...";
+
+  let probabilidad;
+  switch (multiplicador) {
+    case 2: probabilidad = 0.5; break;
+    case 3: probabilidad = 1/3; break;
+    case 4: probabilidad = 0.25; break;
+    default: probabilidad = 0;
+  }
+
+  setTimeout(() => {
+    if (Math.random() < probabilidad) {
+      const ganancia = cantidad * multiplicador;
+      fichas += ganancia;
+      msg.textContent = `🎉 ¡Ganaste! Obtuviste ${ganancia} fichas.`;
+    } else {
+      msg.textContent = "😞 Perdiste la apuesta.";
+    }
+    actualizarFichas();
+  }, 1500);
+}
+
+function jugarCarta() {
+  const msg = document.getElementById("msgCarta");
+  const usuario = Math.floor(Math.random() * 13) + 1;
+  const maquina = Math.floor(Math.random() * 13) + 1;
+
+  if (fichas < 1) {
+    msg.textContent = "⚠️ No tenés fichas para jugar.";
+    return;
+  }
+  fichas--;
+  actualizarFichas();
+
+  if (usuario > maquina) {
+    fichas += 2;
+    msg.textContent = `🎉 Tu carta: ${usuario} | Máquina: ${maquina}. ¡Ganaste 2 fichas!`;
+  } else if (usuario === maquina) {
+    msg.textContent = `🤝 Empate. Tu carta: ${usuario} | Máquina: ${maquina}.`;
+  } else {
+    msg.textContent = `😞 Tu carta: ${usuario} | Máquina: ${maquina}. Perdiste.`;
+  }
+  actualizarFichas();
+}
+
+function jugarDado() {
+  const msg = document.getElementById("msgDado");
+  const dadoDisplay = document.getElementById("dadoNumero");
+  if (fichas < 1) {
+    msg.textContent = "⚠️ No tenés fichas para jugar.";
+    return;
+  }
+  fichas--;
+  actualizarFichas();
+
+  const numero = Math.floor(Math.random() * 6) + 1;
+  dadoDisplay.textContent = numero;
+
+  if (numero === 6) {
+    fichas += 4;
+    msg.textContent = "🎉 ¡Salió 6! Ganaste 4 fichas.";
+  } else {
+    msg.textContent = "😞 No salió 6. Mejor suerte la próxima.";
+  }
+  actualizarFichas();
+}
+
+function volverMenu() {
+  mostrarJuego("menu");
+}
+
+function reiniciarJuego() {
+  fichas = 100;
+  ruletaAnguloAcumulado = 0; // resetear ángulo también
+  actualizarFichas();
+  limpiarMensajes();
+  mostrarJuego("menu");
+}
+
+actualizarFichas();
+
+</script>
 </body>
 </html>
