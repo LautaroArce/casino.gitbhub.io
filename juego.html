@@ -429,14 +429,15 @@
   <button class="btn secondary" onclick="volverMenu()">🔙 Volver al menú</button>
 </section>
 
-  <section class="dado" id="dado" role="region" aria-label="Juego Dado Mágico">
-    <p>Lanzá un dado. Si sacás un 6, ganás.</p>
-    <div class="dado-display" id="dadoNumero">🎲</div>
-    <button class="btn" onclick="jugarDado()">Lanzar dado</button>
-    <div class="message" id="msgDado"></div>
-    <p>Si sale 6: +4 fichas</p>
-    <button class="btn secondary" onclick="volverMenu()">🔙 Volver al menú</button>
-  </section>
+ <section class="dado" id="dado" role="region" aria-label="Juego Dado Mágico">
+  <p>Lanzá un dado. Si sacás un 6, ganás.</p>
+  <input type="number" id="apuestaDado" placeholder="¿Cuántas fichas querés apostar?" min="1" aria-label="Cantidad a apostar" />
+  <div class="dado-display" id="dadoNumero">🎲</div>
+  <button class="btn" onclick="jugarDado()">Lanzar dado</button>
+  <div class="message" id="msgDado"></div>
+  <p>Si sale 6: ganás el cuádruple de lo apostado</p>
+  <button class="btn secondary" onclick="volverMenu()">🔙 Volver al menú</button>
+</section>
 
   <!-- Ruleta Roja, Negra y Verde -->
   <section class="ruleta-roja-negra" id="ruleta-roja-negra" role="region" aria-label="Juego Ruleta Roja, Negra y Verde">
@@ -736,44 +737,41 @@ function jugarCarta() {
 function jugarDado() {
   const msg = document.getElementById("msgDado");
   const dadoDisplay = document.getElementById("dadoNumero");
+  const apuestaInput = document.getElementById("apuestaDado");
+  const apuesta = parseInt(apuestaInput.value);
 
-  if (fichas < 1) {
-    msg.textContent = "⚠️ No tenés fichas para jugar.";
+  if (isNaN(apuesta) || apuesta < 1) {
+    msg.textContent = "⚠️ Ingresá una cantidad válida para apostar.";
+    return;
+  }
+  if (apuesta > fichas) {
+    msg.textContent = "⚠️ No tenés suficientes fichas.";
     return;
   }
 
-  fichas--;
+  fichas -= apuesta;
   actualizarFichas();
 
   msg.textContent = "🎲 Lanzando dado...";
-
-  // Mientras gira, mejor ocultar número para que no parezca fijo
-  dadoDisplay.textContent = ""; 
-  // Agregar clase para animar giro tipo reloj
+  dadoDisplay.textContent = "";
   dadoDisplay.classList.add("dado-animado");
 
-  // Al terminar animación (2 segundos)
   setTimeout(() => {
-    // Generar número final del dado
     const numero = Math.floor(Math.random() * 6) + 1;
-
-    // Mostrar número en dado
     dadoDisplay.textContent = numero;
 
     if (numero === 6) {
-      fichas += 4;
-      msg.textContent = "🎉 ¡Salió 6! Ganaste 4 fichas.";
+      const ganancia = apuesta * 4;
+      fichas += ganancia;
+      msg.textContent = `🎉 ¡Salió 6! Ganaste ${ganancia} fichas.`;
     } else {
-      msg.textContent = "😞 No salió 6. Mejor suerte la próxima.";
+      msg.textContent = `😞 Salió ${numero}. Perdiste ${apuesta} fichas.`;
     }
 
     actualizarFichas();
-
-    // Remover clase para poder repetir animación la próxima vez
     dadoDisplay.classList.remove("dado-animado");
   }, 2000);
 }
-
 
 
 function volverMenu() {
