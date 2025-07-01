@@ -380,11 +380,12 @@
   <!-- Ruleta Roja, Negra y Verde -->
   <section class="ruleta-roja-negra" id="ruleta-roja-negra" role="region" aria-label="Juego Ruleta Roja, Negra y Verde">
     <input type="number" id="apuestaRojaNegra" placeholder="Cantidad a apostar" min="1" aria-label="Cantidad a apostar" />
-    <select id="eleccionRojaNegra" aria-label="Elegir roja, negra o verde">
-      <option value="" disabled selected>Elegí Roja o Negra</option>
-      <option value="roja">Roja</option>
-      <option value="negra">Negra</option>
-    </select>
+    <select id="eleccionRojaNegra">
+  <option value="">-- Elegí un color --</option>
+  <option value="roja">Roja</option>
+  <option value="negra">Negra</option>
+  <option value="verde">Verde</option> <!-- Se agregó esta opción -->
+</select>
 
     <div id="ruletaVisual" aria-live="polite" aria-atomic="true" aria-label="Ruleta que gira">
       <div id="flecha" aria-hidden="true"></div>
@@ -401,9 +402,11 @@
 <footer role="contentinfo">
   &copy; 2025 Mini Casino. Todos los derechos reservados.
 </footer>
+
+
 <script>
 let fichas = 100;
-let ruletaAnguloAcumulado = 0; // Para la ruleta roja-negra-verde
+let ruletaAnguloAcumulado = 0;
 
 function actualizarFichas() {
   document.getElementById("fichas").textContent = fichas;
@@ -425,17 +428,15 @@ function mostrarJuego(nombre) {
   });
 }
 
-// Limpiar mensajes
 function limpiarMensajes() {
   const ids = ["msgTraga", "msgRuleta", "msgApuesta", "msgCarta", "msgDado", "msgRojaNegra"];
   ids.forEach(id => {
     const el = document.getElementById(id);
-    if(el) el.textContent = "";
+    if (el) el.textContent = "";
   });
 }
 
-// Juegos...
-
+// 🎯 Ruleta Roja, Negra, Verde (realista)
 function jugarRojaNegra() {
   const msg = document.getElementById("msgRojaNegra");
   const apuestaInput = document.getElementById("apuestaRojaNegra");
@@ -476,32 +477,26 @@ function jugarRojaNegra() {
     verde: 240
   };
 
-  ruleta.style.transition = "transform 3s cubic-bezier(0.33, 1, 0.68, 1)";
-  
-  // Acumular el ángulo para que la ruleta siga girando correctamente
+  ruleta.style.transition = "transform 3s ease-out";
   ruletaAnguloAcumulado += 1080 + angulos[resultado];
   ruleta.style.transform = `rotate(${ruletaAnguloAcumulado}deg)`;
 
   setTimeout(() => {
-  let mensaje;
-
-  if (resultado === "verde") {
-    const ganancia = apuesta * 14;
-    fichas += ganancia;
-    mensaje = `🟢 ¡Sorpresa! Salió verde. Ganaste ${ganancia} fichas.`;
-  } else if (eleccion === resultado) {
-    const ganancia = apuesta * 2;
-    fichas += ganancia;
-    mensaje = `🎉 ¡Ganaste! Salió ${resultado}. Obtuviste ${ganancia} fichas.`;
-  } else {
-    mensaje = `😞 Salió ${resultado}. Perdiste la apuesta.`;
-  }
-
-  msg.textContent = mensaje;
-  actualizarFichas();
-}, 3100);
+    if (eleccion === resultado) {
+      let ganancia;
+      if (resultado === "verde") {
+        ganancia = apuesta * 14;
+      } else {
+        ganancia = apuesta * 2;
+      }
+      fichas += ganancia;
+      msg.textContent = `🎉 ¡Ganaste! Salió ${resultado}. Obtuviste ${ganancia} fichas.`;
+    } else {
+      msg.textContent = `😞 Salió ${resultado}. Perdiste la apuesta.`;
+    }
+    actualizarFichas();
+  }, 3100);
 }
-
 function tirarTragamonedas() {
   const slot1 = Math.floor(Math.random() * 5) + 1;
   const slot2 = Math.floor(Math.random() * 5) + 1;
