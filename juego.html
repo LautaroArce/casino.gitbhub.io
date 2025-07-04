@@ -347,9 +347,8 @@
 <nav class="navbar" role="banner">
   <div class="logo" aria-label="Mini Casino Logo">🎮 Mini Casino</div>
   <div>
-    <div class="fichas-movil" aria-live="polite" aria-atomic="true">Fichas: <span id="fichas">100</span></div>
+    
     <a href="img/qr_casino.png" target="_blank" class="btn secondary" aria-label="Ver código QR del casino">📷 Ver QR</a>
-<button class="btn secondary" onclick="reiniciarJuego()">🔄 Reiniciar fichas</button>
   </div>
 </nav>
 
@@ -373,6 +372,7 @@
   <!-- Juegos existentes -->
 
 <section class="tragamonedas" id="tragamonedas">
+  <button class="btn secondary" onclick="reiniciarFichas()">🔄 Reiniciar fichas</button>
     <div class="slots">
       <div class="slot" id="slot1">1</div>
       <div class="slot" id="slot2">1</div>
@@ -390,6 +390,7 @@
    <!-- Ruleta Actualizada -->
   <section class="ruleta" id="ruleta">
     <p>Adivina el número que saldrá</p>
+    <button class="btn secondary" onclick="reiniciarFichas()">🔄 Reiniciar fichas</button>
     <div class="ruleta-display" id="ruletaDisplay">
       <div id="ruletaResultado">🎯</div>
     </div>
@@ -416,6 +417,7 @@
 
 
   <section class="apuestas" id="apuestas" role="region" aria-label="Juego Apuestas">
+    <button class="btn secondary" onclick="reiniciarFichas()">🔄 Reiniciar fichas</button>
     <input type="number" id="cantidadApostar" placeholder="¿Cuántas fichas querés apostar?" min="1" aria-label="Cantidad a apostar" />
     <select id="multiplicador" aria-label="Multiplicador de apuesta">
       <option value="2">x2</option>
@@ -429,6 +431,7 @@
   </section>
 
   <section class="carta" id="carta" role="region" aria-label="Juego Carta Mayor">
+    <button class="btn secondary" onclick="reiniciarFichas()">🔄 Reiniciar fichas</button>
   <p>Sacá una carta (1 al 13). Si tu carta es mayor que la de la máquina, ganás.</p>
   <input type="number" id="apuestaCarta" placeholder="¿Cuántas fichas querés apostar?" min="1" aria-label="Cantidad a apostar" />
   <div class="ruleta-display" id="ruletaDisplayCarta">
@@ -441,6 +444,7 @@
 </section>
 
  <section class="dado" id="dado" role="region" aria-label="Juego Dado Mágico">
+  <button class="btn secondary" onclick="reiniciarFichas()">🔄 Reiniciar fichas</button>
   <p>Lanzá un dado. Si sacás un 6, ganás.</p>
   <input type="number" id="apuestaDado" placeholder="¿Cuántas fichas querés apostar?" min="1" aria-label="Cantidad a apostar" />
   <div class="dado-display" id="dadoNumero">🎲</div>
@@ -452,6 +456,7 @@
 
   <!-- Ruleta Roja, Negra y Verde -->
   <section class="ruleta-roja-negra" id="ruleta-roja-negra" role="region" aria-label="Juego Ruleta Roja, Negra y Verde">
+    <button class="btn secondary" onclick="reiniciarFichas()">🔄 Reiniciar fichas</button>
     <input type="number" id="apuestaRojaNegra" placeholder="Cantidad a apostar" min="1" aria-label="Cantidad a apostar" />
     <select id="eleccionRojaNegra">
   <option value="">-- Elegí un color --</option>
@@ -485,6 +490,12 @@
 <script>
 let fichas = 100;
 let ruletaAnguloAcumulado = 0;
+
+function reiniciarFichas() {
+  fichas = 100;
+  actualizarFichas();
+}
+
 
 function actualizarFichas() {
   document.getElementById("fichas").textContent = fichas;
