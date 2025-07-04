@@ -366,7 +366,7 @@
   </section>
 <div id="mensajePremio"
      style="display:none; margin-top: 20px; font-size: 1.2rem; font-weight: bold; background: #4ade80; color: #111; padding: 15px 20px; border-radius: 14px;">
-  🏱 ¡Felicitaciones! Alcanzaste 1.000 fichas.
+  🏱 ¡Felicitaciones! Alcanzaste 1.500 fichas.
 </div>
 
   <!-- Juegos existentes -->
@@ -501,7 +501,7 @@ function actualizarFichas() {
   document.getElementById("fichas").textContent = fichas;
   document.getElementById("fichas-desktop").textContent = fichas;
 
-  if (fichas >= 1000 && !actualizarFichas.yaMostroGanador) {
+  if (fichas >= 1500 && !actualizarFichas.yaMostroGanador) {
     const mensaje = document.getElementById("mensajePremio");
     mensaje.style.display = "block";
     mensaje.classList.add("animado");
