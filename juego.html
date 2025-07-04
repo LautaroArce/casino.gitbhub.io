@@ -331,7 +331,14 @@
   animation: girarReloj 2s ease forwards;
 }
 
+@keyframes brillar {
+  0%, 100% { background-color: #4ade80; transform: scale(1); }
+  50% { background-color: #22c55e; transform: scale(1.05); }
+}
 
+#mensajePremio.animado {
+  animation: brillar 1s ease-in-out 3;
+}
 
 </style>
 </head>
@@ -358,6 +365,10 @@
     <button class="btn" onclick="mostrarJuego('ruleta-roja-negra')">🎲🔴⚫ Ruleta Roja, Negra y Verde</button>
     <button class="btn secondary" onclick="reiniciarJuego()">🔄 Reiniciar fichas</button>
   </section>
+<div id="mensajePremio"
+     style="display:none; margin-top: 20px; font-size: 1.2rem; font-weight: bold; background: #4ade80; color: #111; padding: 15px 20px; border-radius: 14px;">
+  🏱 ¡Felicitaciones! Alcanzaste 1.000 fichas.
+</div>
 
   <!-- Juegos existentes -->
 
@@ -478,7 +489,21 @@ let ruletaAnguloAcumulado = 0;
 function actualizarFichas() {
   document.getElementById("fichas").textContent = fichas;
   document.getElementById("fichas-desktop").textContent = fichas;
+
+  if (fichas >= 1000 && !actualizarFichas.yaMostroGanador) {
+    const mensaje = document.getElementById("mensajePremio");
+    mensaje.style.display = "block";
+    mensaje.classList.add("animado");
+
+    const audio = document.getElementById("sonidoPremio");
+    audio.play();
+
+    alert("🎉 ¡Felicitaciones! Alcanzaste 1500 fichas y ganaste un premio especial 🏱");
+
+    actualizarFichas.yaMostroGanador = true;
+  }
 }
+
 
 function mostrarJuego(nombre) {
   limpiarMensajes();
